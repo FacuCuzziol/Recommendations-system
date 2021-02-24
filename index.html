@@ -1,0 +1,123 @@
+<!-- templates/index.html -->
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <br><br>
+    <div class='jumbotron jumbrotron-fluid'>
+
+        <div class='container'>
+            <h2 class='display-4'>Product Recommendation System</h2>
+            <p class='lead'>Deep Neural Network model,based on data from the MeLi-Data Challenge</p>
+            <hr class="my-2">
+            <p>Made with Keras and Flask</p>
+            <p class='lead'>
+                <a class='btn btn-primary btn-lg' href='#!' role='button'>View on Github</a>
+            </p>
+        </div>
+    </div>
+    <div class='card text-center w-75'>
+        <div class='card-body'>
+            <h3>Write the Product ID to look for recommendations🔎</h3>
+            <br>
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Product ID</span>
+                </div>
+                <input id='item_1' type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <br>
+            <button id='predict' type="button" class="btn btn-primary btn-lg btn-block">Find recommendations</button>
+        </div>
+    </div>
+    <br><br>
+    <div class='card text-center w-75'>
+        <h2>Product Info</h2>
+        <div id="item_base">
+
+        </div>
+    </div>
+    <br><br>
+    <div class='card text-center w-75'>
+        <h2>Recommendations</h2>
+        <br>
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Item #1</h4>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <div id="item_reco_1">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Item #2</h4>
+                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                    <div id="item_reco_2">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Item #3</h4>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                    <div id="item_reco_3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        var button = document.getElementById(' predict ');
+
+        var item_1 = document.getElementById('item_1 ');
+        var item_base = document.getElementById('item_base ');
+
+        var item_reco_1 = document.getElementById('item_reco_1 ');
+        var item_reco_2 = document.getElementById('item_reco_2 ');
+        var item_reco_3 = document.getElementById('item_reco_3 ');
+
+
+
+        button.addEventListener('click ', function() {
+            var jsonData = {
+                item_1: item_1.value
+            }
+
+            console.log(JSON.stringify(jsonData))
+
+            fetch('http://localhost:5000/predict ', {
+                headers: {
+                    'Accept ': 'application/json ',
+                    'Content-Type ': 'application/json '
+                },
+                method: 'post ',
+                body: JSON.stringify(jsonData)
+            }).then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                console.log(data);
+                item_base.innerHTML = data['item_base '];
+                item_reco_1.innerHTML = data['item_reco_1 '];
+                item_reco_2.innerHTML = data['item_reco_2 '];
+                item_reco_3.innerHTML = data['item_reco_3 '];
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
